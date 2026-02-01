@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant Manga Reader</title>
+    <title>Manga Reader</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-content">
-                <div class="logo" onclick="app.showHome()">MANGA READER</div>
-                <div class="search-container">
-                    <input 
-                        type="text" 
-                        class="search-box" 
-                        placeholder="Search manga..." 
-                        id="searchInput"
-                        onkeypress="app.handleSearchKeypress(event)"
-                    >
-                </div>
-                <div class="nav-tabs">
-                    <div class="nav-tab active" onclick="app.showPopular()">Popular</div>
-                    <div class="nav-tab" onclick="app.showLatest()">Latest</div>
-                    <div class="nav-tab" onclick="app.showRecent()">Recent</div>
-                </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo">MANGA READER</h1>
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search manga..." 
+                    id="searchInput"
+                >
             </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-view="popular">Popular</button>
+                <button class="nav-btn" data-view="latest">Latest</button>
+                <button class="nav-btn" data-view="recent">Recent</button>
+            </nav>
         </div>
+    </header>
 
-        <!-- Main Content -->
-        <div class="container" id="mainContent">
-            <div class="loading">
-                <div class="spinner"></div>
-                Loading manga...
-            </div>
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="loading-screen">
+            <div class="loader"></div>
+            <p>Loading manga...</p>
         </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
