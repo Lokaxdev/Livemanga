@@ -113,7 +113,9 @@ const app = {
                         <img 
                             src="${this.getImageUrl(featuredManga.image)}" 
                             alt="${this.escapeHtml(featuredManga.title)}"
-                            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 fill=%22%23666%22 text-anchor=%22middle%22 font-size=%2218%22%3ENo Image%3C/text%3E%3C/svg%3E'"
+                            crossorigin="anonymous"
+                            onload="console.log('Featured image loaded:', this.src)"
+                            onerror="console.error('Featured image failed:', this.src); this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 fill=%22%23666%22 text-anchor=%22middle%22 font-size=%2218%22%3ENo Image%3C/text%3E%3C/svg%3E'"
                         >
                     </div>
                 </div>
@@ -141,7 +143,9 @@ const app = {
                             src="${imageUrl}" 
                             alt="${title}"
                             loading="lazy"
-                            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22 viewBox=%220 0 200 300%22%3E%3Crect fill=%22%23333%22 width=%22200%22 height=%22300%22/%3E%3Ctext x=%22100%22 y=%22150%22 fill=%22%23666%22 text-anchor=%22middle%22 font-size=%2214%22%3ENo Image%3C/text%3E%3C/svg%3E'"
+                            crossorigin="anonymous"
+                            onload="console.log('Image loaded:', this.src)"
+                            onerror="console.error('Image failed:', this.src); this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22 viewBox=%220 0 200 300%22%3E%3Crect fill=%22%23333%22 width=%22200%22 height=%22300%22/%3E%3Ctext x=%22100%22 y=%22150%22 fill=%22%23666%22 text-anchor=%22middle%22 font-size=%2214%22%3ENo Image%3C/text%3E%3C/svg%3E'"
                         >
                     </div>
                     <div class="manga-card-info">
@@ -377,15 +381,20 @@ const app = {
         }
     },
 
-    // Get image URL - FIXED: Proper proxy handling
+    // Get image URL - FIXED: Using CORS proxy
     getImageUrl(imageUrl) {
         if (!imageUrl) {
-            return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22200%22 height=%22300%22/%3E%3C/svg%3E';
+            console.log('No image URL provided');
+            return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22200%22 height=%22300%22/%3E%3Ctext x=%22100%22 y=%22150%22 fill=%22%23666%22 text-anchor=%22middle%22 font-size=%2214%22%3ENo Image%3C/text%3E%3C/svg%3E';
         }
         
-        // If it's already a full URL from MangaDex, use the proxy
+        console.log('Original image URL:', imageUrl);
+        
+        // Use CORS proxy to bypass CORS issues
         if (imageUrl.startsWith('http')) {
-            return `https://consumet3.vercel.app/manga/mangadex/proxy?url=${encodeURIComponent(imageUrl)}`;
+            const proxiedUrl = `https://corsproxy.io/?${encodeURIComponent(imageUrl)}`;
+            console.log('Using CORS proxy:', proxiedUrl);
+            return proxiedUrl;
         }
         
         return imageUrl;
